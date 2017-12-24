@@ -10,15 +10,15 @@ void UIntToHexStr(unsigned int uiValue, char pcStr[]){
     pcStr[0]='0';
     pcStr[1]='x';
     for(ucCurrentTetrad=0; ucCurrentTetrad<4; ucCurrentTetrad++){
-		cTetradValue=(uiValue >> (4 * (3-ucCurrentTetrad))) & 0xF;
-		if(cTetradValue>10){
-			pcStr[ucCurrentTetrad+2]=cTetradValue-10+'A';
+		cTetradValue=(uiValue>>(4*ucCurrentTetrad))&0xF;
+		if(cTetradValue>=10){
+			pcStr[5-ucCurrentTetrad]=cTetradValue-10+'A';
 		}
 		else{
-			pcStr[ucCurrentTetrad+2]=cTetradValue+'0';
+			pcStr[5-ucCurrentTetrad]=cTetradValue+'0';
 		}
     }
-    pcStr[ucCurrentTetrad+2]=NULL;
+    pcStr[6]=NULL;	
 	
 }
 
