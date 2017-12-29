@@ -78,27 +78,27 @@ enum ComparationResult eStringToKeyword(char cStr[], enum KeywordCode *peKeyword
 	for(ucKeywordIndex=0;ucKeywordIndex<MAX_KEYWORD_NR;ucKeywordIndex++){
 		printf("ucKeywordIndex: %d\n", ucKeywordIndex);
 		for(ucCharIndex=0; cStr[ucCharIndex]==asKeywordList[ucKeywordIndex].cString[ucCharIndex]; ucCharIndex++){
-			printf("\tcStr: %c | cString: %c\n", cStr[ucCharIndex], asKeywordList[ucKeywordIndex].cString[ucCharIndex]);
+			printf("\tcStr: %c | cString: %c\n", cStr[ucCharIndex], asKeywordList[ucKeywordIndex].cString[ucCharIndex]);	//
 			if(NULL==cStr[ucCharIndex]){
 				peKeyword = &asKeywordList[ucKeywordIndex].eCode;	// nie przypisuje wartości do wskaznika
-				printf("\tOK\n");
-				switch(*peKeyword){
-					case 0:
-						printf("\t*peKeyword: load\n");
-						break;
-					case 1:
-						printf("\t*peKeyword: store\n");
-						break;
-					case 2:
-						printf("\t*peKeyword: reset\n");
-						break;
-				}
-				printf("\t%d\n", *peKeyword);
-				return OK;
+				printf("\tOK\n");									//
+				switch(*peKeyword){									//
+					case 0:											//
+						printf("\t*peKeyword: load\n");				//
+						break;										//	
+					case 1:											//
+						printf("\t*peKeyword: store\n");			//
+						break;										//	
+					case 2:											//	
+						printf("\t*peKeyword: reset\n");			//
+						break;										//
+				}													//
+				printf("\t%d\n", *peKeyword);						//
+				return OK;		
 			}
 		}
 	}
-	printf("\tERROR\n");
+	printf("\tERROR\n");											//	
 	return ERROR;
 }   
 
@@ -158,8 +158,6 @@ int main(void){
 	
 	char c[]="reset";
 	enum KeywordCode *pt;
-	
-	printf("\n***%d***\n", *pt);
 	if(eStringToKeyword(c, pt)==OK){
 		switch(*pt){
 						case 0:
@@ -176,6 +174,5 @@ int main(void){
 							break;
 					}
 	}
-	printf("\n***%d***\n", *pt);
 	return 0;
 }
