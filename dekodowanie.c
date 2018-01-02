@@ -70,39 +70,23 @@ unsigned char ucFindTokensInString(char *pcString){
 		}
     }
 }
-// ongoing
+
 enum ComparationResult eStringToKeyword(char cStr[], enum KeywordCode *peKeyword){
 
 	unsigned char ucKeywordIndex, ucCharIndex;
 
 	for(ucKeywordIndex=0;ucKeywordIndex<MAX_KEYWORD_NR;ucKeywordIndex++){
-		printf("ucKeywordIndex: %d\n", ucKeywordIndex);
 		for(ucCharIndex=0; cStr[ucCharIndex]==asKeywordList[ucKeywordIndex].cString[ucCharIndex]; ucCharIndex++){
-			printf("\tcStr: %c | cString: %c\n", cStr[ucCharIndex], asKeywordList[ucKeywordIndex].cString[ucCharIndex]);	//
 			if(NULL==cStr[ucCharIndex]){
-				peKeyword = &asKeywordList[ucKeywordIndex].eCode;	// nie przypisuje wartości do wskaznika
-				printf("\tOK\n");									//
-				switch(*peKeyword){									//
-					case 0:											//
-						printf("\t*peKeyword: load\n");				//
-						break;										//	
-					case 1:											//
-						printf("\t*peKeyword: store\n");			//
-						break;										//	
-					case 2:											//	
-						printf("\t*peKeyword: reset\n");			//
-						break;										//
-				}													//
-				printf("\t%d\n", *peKeyword);						//
+				*peKeyword=asKeywordList[ucKeywordIndex].eCode;
 				return OK;		
 			}
 		}
 	}
-	printf("\tERROR\n");											//	
 	return ERROR;
 }   
 
-/*void DecodeTokens(void){
+void DecodeTokens(void){	// ongoing 
 
 	unsigned char ucTokenCtr;
 
@@ -126,7 +110,7 @@ enum ComparationResult eStringToKeyword(char cStr[], enum KeywordCode *peKeyword
 	}
 }
 
-void DecodeMsg(char *cStr) {
+/*void DecodeMsg(char *cStr) {
 	ucFindTokensInString(cStr);
 	ReplaceCharactersInString(cStr,SPACE,NULL);
 	DecodeTokens();
@@ -152,27 +136,27 @@ int main(void){
 	return 0;
 }*/
 
-//------------------------------------------------------------------------------------
-//
+/*//------------------------------------------------------------------------------------
+//		eStringToKeyword TEST
 int main(void){
 	
-	char c[]="reset";
-	enum KeywordCode *pt;
-	if(eStringToKeyword(c, pt)==OK){
-		switch(*pt){
-						case 0:
-							printf("\t*pt: load\n");
+	char cToken[]="reset";
+	enum KeywordCode eKeyWordResult;
+	if(eStringToKeyword(cToken, &eKeyWordResult)==OK){
+		switch(eKeyWordResult){
+						case LD:
+							printf("Result: load\n");
 							break;
-						case 1:
-							printf("\t*pt: store\n");
+						case ST:
+							printf("Result: store\n");
 							break;
-						case 2:
-							printf("\t*pt: reset\n");
+						case RST:
+							printf("Result: reset\n");
 							break;
 						default:
-							printf("\t*pt: none\n");
+							printf("Result: none\n");
 							break;
 					}
 	}
 	return 0;
-}
+}*/
