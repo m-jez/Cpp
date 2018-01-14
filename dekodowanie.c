@@ -88,32 +88,13 @@ enum ComparationResult eStringToKeyword(char cStr[], enum KeywordCode *peKeyword
 
 void DecodeTokens(void){	// ongoing 
 
-	unsigned char ucTokenCtr;
-
-	for (ucTokenCtr=0; ucTokenCtr < ucTokenNr ; ucTokenCtr ++ ) {
-		KeywordCode eKeywordCode;
-		unsigned int uiNumberValue;
-		Token * pasToken;
-		pasToken = &asToken[ucTokenCtr];
-
-		if (eStringToKeyword(pasToken ->uValue.pcString, &eKeywordCode) == OK) {
-			pasToken->eType = KEYWORD;
-			pasToken->uValue.eKeyword = eKeywordCode;
-		}
-		else if (eHexStringToUInt(pasToken ->uValue.pcString, &uiNumberValue) == OK) {
-			pasToken->eType = NUMBER;
-			pasToken->uValue.uiNumber = uiNumberValue;
-		}
-		else {
-			pasToken ->eType = STRING;
-		}
-	}
+	
 }
 
 /*void DecodeMsg(char *cStr) {
-	ucFindTokensInString(cStr);
-	ReplaceCharactersInString(cStr,SPACE,NULL);
-	DecodeTokens();
+	
+	
+	
 }*/
 
 /*//------------------------------------------------------------------------------------
@@ -160,3 +141,12 @@ int main(void){
 	}
 	return 0;
 }*/
+
+/*//------------------------------------------------------------------------------------
+int main(void){
+	
+	
+	
+	return 0;
+}*/
+
