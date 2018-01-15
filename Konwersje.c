@@ -1,6 +1,8 @@
+#include "konwersje.h"
+
 #define NULL '\0'
 
-enum Result{OK, ERROR};
+//enum Result{OK, ERROR};
 
 void UIntToHexStr(unsigned int uiValue, char pcStr[]){
     
@@ -27,8 +29,9 @@ enum Result eHexStringToUInt(char pcStr[], unsigned int *puiValue){
     unsigned int ucCurrentChar;
     unsigned int uiCharValue;
     
+	*puiValue = 0;
     if(('0'!=pcStr[0]) || ('x'!=pcStr[1])){
-		return ERROR;
+		return FAIL;
 	}
 	for(ucCurrentChar=2; !(NULL==pcStr[ucCurrentChar]); ucCurrentChar++){
 		if((pcStr[ucCurrentChar] <= '9') && (pcStr[ucCurrentChar] >= '0')){
@@ -44,14 +47,14 @@ enum Result eHexStringToUInt(char pcStr[], unsigned int *puiValue){
 			*puiValue=(*puiValue<<4)+uiCharValue;
 		}
 		else{
-			return ERROR;
+			return FAIL;
 		}
 	}
 	if((7>ucCurrentChar) && (2<ucCurrentChar)){
-		return OK;
+		return CORRECT;
 	}
 	else {
-		return ERROR;
+		return FAIL;
 	}
 }
 

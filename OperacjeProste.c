@@ -1,6 +1,8 @@
+#include "operacjeproste.h"
+
 #define NULL '\0'
 
-enum CompResult{ DIFFERENT, EQUAL};
+//enum CompResult{ DIFFERENT, EQUAL};
 
 void CopyString(char pcSource[], char pcDestination[]){
     
@@ -14,12 +16,12 @@ void CopyString(char pcSource[], char pcDestination[]){
 
 enum CompResult eCompareString(char pcStr1[], char pcStr2[]){
     
-    enum CompResult eCompResult = DIFFERENT;
+    enum CompResult eCompResult = ERROR;
     unsigned char ucStringIndex; 
     
     for(ucStringIndex=0;(pcStr1[ucStringIndex]==pcStr2[ucStringIndex]);ucStringIndex++){
         if(NULL==pcStr1[ucStringIndex]){
-            eCompResult=EQUAL};
+            eCompResult=OK;
             break;
         }
     }

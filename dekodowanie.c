@@ -2,6 +2,8 @@
 #ifdef NULL			//	FOR
 	#undef NULL		//	TESTING
 #endif //NULL		//	!!!
+#include "operacjeproste.h"
+#include "konwersje.h"
 
 #define MAX_TOKEN_NR            3            
 #define MAX_KEYWORD_NR          3
@@ -12,7 +14,7 @@
 enum TokenStatus {TOKEN, DELIMITER};
 enum TokenType {KEYWORD, NUMBER, STRING};
 enum KeywordCode {LD, ST, RST};
-enum ComparationResult {OK, ERROR};
+//enum ComparationResult {OK, ERROR};  // CompResult form operacjeproste.h
 
 struct Keyword{
 	enum KeywordCode eCode;
@@ -62,40 +64,66 @@ unsigned char ucFindTokensInString(char *pcString){
 					return ucTokenNr;
 				}
 				else if (!(cCurrentChar==SPACE)){
-					ucTokenNr++;
 					asToken[ucTokenNr].uValue.pcString=&pcString[ucCharIndex];
 					eState=TOKEN;
+					ucTokenNr++;
 				}
 				break;
 		}
-    }
+	}
 }
 
-enum ComparationResult eStringToKeyword(char cStr[], enum KeywordCode *peKeyword){
+enum CompResult eStringToKeyword(char cStr[], enum KeywordCode *peKeyword){
 
 	unsigned char ucKeywordIndex, ucCharIndex;
-
 	for(ucKeywordIndex=0;ucKeywordIndex<MAX_KEYWORD_NR;ucKeywordIndex++){
-		for(ucCharIndex=0; cStr[ucCharIndex]==asKeywordList[ucKeywordIndex].cString[ucCharIndex]; ucCharIndex++){
-			if(NULL==cStr[ucCharIndex]){
-				*peKeyword=asKeywordList[ucKeywordIndex].eCode;
-				return OK;		
-			}
+		if(eCompareString(cStr, asKeywordList[ucKeywordIndex].cString) == OK ){
+			*peKeyword=asKeywordList[ucKeywordIndex].eCode;
+			return OK;
 		}
 	}
 	return ERROR;
 }   
 
-void DecodeTokens(void){	// ongoing 
+void DecodeTokens(void)
+{
+    unsigned char ucTokenNumberCounter;
+    char *cCurrentToken;
+    enum KeywordCode peKeywordCode;
+    unsigned int uiValue;
+    enum TokenType eType;
+    union TokenValue uValue;
 
-	
+    for(ucTokenNumberCounter=0; ucTokenNumberCounter<ucTokenNr; ucTokenNumberCounter++)
+    {
+        cCurrentToken=asToken[ucTokenNumberCounter].uValue.pcString;
+        if(eStringToKeyword(cCurrentToken, &peKeywordCode)==OK)
+        {
+            eType=KEYWORD;
+            uValue.eKeyword=peKeywordCode;
+        }
+        else if(eHexStringToUInt(cCurrentToken,&uiValue)==OK)
+        {
+            eType=NUMBER;
+            uValue.uiNumber=uiValue;
+        }
+        else
+        {
+            eType=STRING;
+            uValue.pcString=cCurrentToken;
+        }
+        asToken[ucTokenNumberCounter].eType=eType;
+        asToken[ucTokenNumberCounter].uValue=uValue;
+    }
 }
+///////////////////////////////////////////////////////////////////////////////
 
-/*void DecodeMsg(char *cStr) {
-	
-	
-	
-}*/
+void DecodeMsg(char *pcString)
+{
+    ucTokenNr = ucFindTokensInString (pcString);
+    ReplaceCharactersInString(pcString,' ','\0');
+    DecodeTokens();
+}
 
 /*//------------------------------------------------------------------------------------
 //		ucFindTokensInString TEST
@@ -142,11 +170,41 @@ int main(void){
 	return 0;
 }*/
 
-/*//------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------------
+//		DecodeMsg	TEST
 int main(void){
 	
+	char Str[] = "reset load store 0x0064 siema";
+	unsigned char ucTokenIndex;
 	
-	
+	printf("\nDecoding string '%s'\n\n", Str);
+	DecodeMsg(Str);
+	for(ucTokenIndex=0; ucTokenIndex < MAX_TOKEN_NR; ucTokenIndex++){
+		printf("Token number %i:\n", ucTokenIndex);
+		switch(asToken[ucTokenIndex].eType){
+			case KEYWORD:
+				printf("\tType KEYWORD | Code ");
+				switch(asToken[ucTokenIndex].uValue.eKeyword){
+					case LD:
+						printf("LD\n");
+						break;
+					case ST:
+						printf("ST\n");
+						break;
+					case RST:
+						printf("RST\n");
+						break;
+				}
+				break;
+			case NUMBER:
+				printf("\tType NUMBER | Value: %i\n", asToken[ucTokenIndex].uValue);
+				break;
+			case STRING:
+				printf("\tType STRING | TEXT: %s\n", asToken[ucTokenIndex].uValue);
+				break;
+		}
+	}	
+	printf("\n\t### END OF TEST ###\n\n");
 	return 0;
-}*/
-
+}
