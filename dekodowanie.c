@@ -75,7 +75,7 @@ unsigned char ucFindTokensInString(char *pcString){
 
 enum CompResult eStringToKeyword(char cStr[], enum KeywordCode *peKeyword){
 
-	unsigned char ucKeywordIndex, ucCharIndex;
+	unsigned char ucKeywordIndex;
 	for(ucKeywordIndex=0;ucKeywordIndex<MAX_KEYWORD_NR;ucKeywordIndex++){
 		if(eCompareString(cStr, asKeywordList[ucKeywordIndex].cString) == OK ){
 			*peKeyword=asKeywordList[ucKeywordIndex].eCode;
@@ -93,10 +93,12 @@ void DecodeTokens(void)
     unsigned int uiValue;
     enum TokenType eType;
     union TokenValue uValue;
+	struct Token *psCurrentToken;
 
     for(ucTokenNumberCounter=0; ucTokenNumberCounter<ucTokenNr; ucTokenNumberCounter++)
     {
-        cCurrentToken=asToken[ucTokenNumberCounter].uValue.pcString;
+		psCurrentToken = &asToken[ucTokenNumberCounter];
+        cCurrentToken=psCurrentToken->uValue.pcString;
         if(eStringToKeyword(cCurrentToken, &peKeywordCode)==OK)
         {
             eType=KEYWORD;
@@ -112,8 +114,8 @@ void DecodeTokens(void)
             eType=STRING;
             uValue.pcString=cCurrentToken;
         }
-        asToken[ucTokenNumberCounter].eType=eType;
-        asToken[ucTokenNumberCounter].uValue=uValue;
+        psCurrentToken->eType=eType;
+        psCurrentToken->uValue=uValue;
     }
 }
 ///////////////////////////////////////////////////////////////////////////////
